@@ -33,9 +33,9 @@ MODEL_FLAGS="--image_size 64 --num_channels 128 --num_res_blocks 3"
 DIFFUSION_FLAGS="--diffusion_steps 4000 --noise_schedule linear"
 TRAIN_FLAGS="--lr 1e-4 --batch_size 128"
 ```
-受限于24G显存，使用32作为batch_size
+受限于24G显存，使用32作为batch_size，使用cifar-10时，image_size可以设置为32
 ```
-MODEL_FLAGS="--image_size 64 --num_channels 128 --num_res_blocks 3"
+MODEL_FLAGS="--image_size 32 --num_channels 128 --num_res_blocks 3"
 DIFFUSION_FLAGS="--diffusion_steps 4000 --noise_schedule linear"
 TRAIN_FLAGS="--lr 1e-4 --batch_size 32"
 ```
