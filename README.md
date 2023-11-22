@@ -33,7 +33,12 @@ MODEL_FLAGS="--image_size 64 --num_channels 128 --num_res_blocks 3"
 DIFFUSION_FLAGS="--diffusion_steps 4000 --noise_schedule linear"
 TRAIN_FLAGS="--lr 1e-4 --batch_size 128"
 ```
-
+受限于24G显存，使用32作为batch_size
+```
+MODEL_FLAGS="--image_size 64 --num_channels 128 --num_res_blocks 3"
+DIFFUSION_FLAGS="--diffusion_steps 4000 --noise_schedule linear"
+TRAIN_FLAGS="--lr 1e-4 --batch_size 32"
+```
 Here are some changes we experiment with, and how to set them in the flags:
 
  * **Learned sigmas:** add `--learn_sigma True` to `MODEL_FLAGS`
@@ -46,11 +51,19 @@ Once you have setup your hyper-parameters, you can run an experiment like so:
 ```
 python scripts/image_train.py --data_dir path/to/images $MODEL_FLAGS $DIFFUSION_FLAGS $TRAIN_FLAGS
 ```
+将data_dir设置为./datasets
+```
+python scripts/image_train.py --data_dir datasets $MODEL_FLAGS $DIFFUSION_FLAGS $TRAIN_FLAGS
+```
 
 You may also want to train in a distributed manner. In this case, run the same command with `mpiexec`:
 
 ```
 mpiexec -n $NUM_GPUS python scripts/image_train.py --data_dir path/to/images $MODEL_FLAGS $DIFFUSION_FLAGS $TRAIN_FLAGS
+```
+将GPU个数设置为2
+```
+mpiexec -n 2 python scripts/image_train.py --data_dir path/to/images $MODEL_FLAGS $DIFFUSION_FLAGS $TRAIN_FLAGS
 ```
 
 When training in a distributed manner, you must manually divide the `--batch_size` argument by the number of ranks. In lieu of distributed training, you may use `--microbatch 16` (or `--microbatch 1` in extreme memory-limited cases) to reduce memory usage.
